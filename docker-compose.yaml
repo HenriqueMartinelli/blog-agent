@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: blog_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: blog_user
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: blog_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      network: host 
+    container_name: blog_api
+    command: uvicorn app:app --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+volumes:
+  pgdata:
