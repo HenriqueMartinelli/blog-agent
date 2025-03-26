@@ -14,18 +14,22 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+
   api:
     build:
       context: .
       network: host 
     container_name: blog_api
-    command: uvicorn app:app --reload
+    command: gunicorn app:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --workers 1 --log-level debug --access-logfile - --error-logfile -
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     env_file:
       - .env
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 
 volumes:
   pgdata:

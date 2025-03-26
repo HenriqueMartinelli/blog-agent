@@ -5,6 +5,7 @@ import os
 
 class Settings(BaseSettings):
     OPENAI_API_KEY: str
+    OPENAI_MODEL: str
 
     TOPIC_API_URL: str = "https://api.fake-topics.dev/trending"
     TOPIC_API_KEY: str = "demo-key"

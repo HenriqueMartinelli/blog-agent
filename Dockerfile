@@ -1,11 +1,30 @@
 FROM python:3.13-slim
 
+# Instala dependências do sistema
+RUN apt-get update && apt-get install -y curl build-essential libpq-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Instala Poetry via script oficial
+ENV POETRY_HOME="/opt/poetry"
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Cria diretório da app
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock ./
-RUN pip install poetry && poetry config virtualenvs.create false && poetry install --no-root
+# Copia arquivos do projeto
+COPY pyproject.toml poetry.lock* ./
 
+# Instala dependências do projeto SEM virtualenv (instala direto no sistema)
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-root
+
+# Copia o resto da aplicação
 COPY . .
 
-CMD ["uvicorn", "app.main:app",  "--reload"]
+# Expõe a porta
+EXPOSE 8000
+
+# Comando de start com gunicorn
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "app:app"]
