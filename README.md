@@ -42,28 +42,6 @@ O projeto foi implementado com **PostgreSQL** por três razões principais:
 
 ---
 
-## ⚙️ Instalação do Ambiente de Desenvolvimento
-
-### Instalando o Poetry
-
-Poetry é utilizado para gerenciamento de dependências e ambientes virtuais.
-
-📚 [Documentação oficial do Poetry](https://python-poetry.org/docs/#installation)
-
-Verifique a instalação:
-```bash
-poetry --version
-```
-
-### Instalando as dependências
-
-```bash
-poetry shell
-poetry install
-```
-
----
-
 ## 🐳 Execução com Docker Compose
 
 1. Certifique-se de ter Docker e Docker Compose instalados.
@@ -99,3 +77,15 @@ DATABASE_URL=postgresql+asyncpg://blog_user:senha123@blog_postgres:5432/blog_db
 DEV=true
 ENVIRONMENT=development
 ```
+
+
+---
+
+## 📚 Documentação da API
+
+Após subir o projeto, você pode acessar a documentação interativa gerada automaticamente pelo **FastAPI** nos seguintes endpoints:
+
+- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+Essas interfaces permitem testar os endpoints diretamente pelo navegador e visualizar os contratos da API com base nos `schemas` definidos.
