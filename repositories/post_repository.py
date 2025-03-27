@@ -10,18 +10,22 @@ from schemas.post import Post, PostUpdate
 from models.models import PostModel
 from database.sqlalchemy_session import get_session
 
+from utils.log_utils import logger
+
 
 class PostRepository:
     def __init__(self) -> None:
         self.get_session = get_session  
 
     async def fetch_all(self) -> List[Post]:
+        logger.info("Fetching all posts...")
         async with self.get_session() as session:
             result = await session.execute(select(PostModel))
             rows = result.scalars().all()
             return [self._to_schema(post) for post in rows]
 
     async def fetch_by_id(self, post_id: int) -> Optional[Post]:
+        logger.info("Fetching post by id...")
         async with self.get_session() as session:
             result = await session.execute(
                 select(PostModel).where(PostModel.id == post_id)
@@ -30,6 +34,7 @@ class PostRepository:
             return self._to_schema(post) if post else None
 
     async def create(self, post: Post) -> Post:
+        logger.info("Creating post...")
         async with self.get_session() as session:
             db_post = PostModel(
                 titulo=post.titulo,
@@ -43,6 +48,7 @@ class PostRepository:
             return self._to_schema(db_post)
 
     async def update(self, post_id: int, data: PostUpdate) -> Optional[Post]:
+        logger.info("Updating post...")
         async with self.get_session() as session:
             result = await session.execute(select(PostModel).where(PostModel.id == post_id))
             db_post = result.scalar_one_or_none()
@@ -57,6 +63,7 @@ class PostRepository:
             return self._to_schema(db_post)
 
     async def delete(self, post_id: int) -> bool:
+        logger.info("Deleting post")
         async with self.get_session() as session:
             result = await session.execute(select(PostModel).where(PostModel.id == post_id))
             db_post = result.scalar_one_or_none()
@@ -68,6 +75,7 @@ class PostRepository:
             return True
 
     def _to_schema(self, model: PostModel) -> Post:
+        logger.info("Converting model to schema")
         return Post(
             id=model.id,
             titulo=model.titulo,
