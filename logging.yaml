@@ -1,0 +1,45 @@
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  default:
+    format: '[%(asctime)s] [%(levelname)s] [Request ID: %(request_id)s] %(message)s'
+  access:
+    format: '[%(asctime)s] [%(levelname)s] [Request ID: %(request_id)s] %(message)s'
+
+filters:
+  request_id_filter:
+    "()": middlewares.log_filters.RequestIdFilter  
+
+handlers:
+  file:
+    class: logging.FileHandler
+    formatter: default
+    filename: logs/app_logs.log
+    filters: [request_id_filter] 
+  console:
+    class: logging.StreamHandler
+    formatter: default
+    stream: ext://sys.stdout
+    filters: [request_id_filter] 
+
+loggers:
+  uvicorn.error:
+    level: INFO
+    handlers:
+      - file
+      - console
+    propagate: no
+  uvicorn.access:
+    level: INFO
+    handlers:
+      - console
+    propagate: no
+
+root:
+  level: INFO
+  handlers:
+    - file
+    - console
+  filters: [request_id_filter]  
+  propagate: no
