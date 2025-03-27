@@ -50,12 +50,12 @@ class PostService(IPostService):
 
     # === AUTONOMOUS ===
 
-    async def create_post_autonomously(self) -> Post:
+    async def create_post_autonomously(self, subreddit: str) -> Post:
         """
         Creates a post autonomously by fetching a trending topic and generating a post.
         """
         logger.info("Creating post autonomously...")
-        topics = await TopicService().get_trending_topics(limit=15)
+        topics = await TopicService().get_trending_topics(subreddit=subreddit, limit=15)
         if not topics:
             raise Exception("Nenhum tópico encontrado.")
 

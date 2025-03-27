@@ -14,6 +14,8 @@ from fastapi import APIRouter, HTTPException
 from typing import List
 
 from schemas.post import Post, PostCreate, PostUpdate, ErrorMessage, PostOut
+from schemas.autonomous_input import AutonomousPostInput
+
 from controllers.posts_controller import PostsController
 from services.posts_service import PostService
 
@@ -135,11 +137,12 @@ Gera automaticamente um post completo utilizando:
 Este endpoint é a principal funcionalidade do agente autônomo.
 """
 )
-async def create_autonomous_post():
+async def create_autonomous_post(payload: AutonomousPostInput):
     """
     Gera um novo post de forma autônoma utilizando inteligência artificial.
 
     Returns:
         PostOut: Objeto contendo o post gerado automaticamente.
     """
-    return await PostService().create_post_autonomously()
+    response = await PostService().create_post_autonomously(payload.subreddit)
+    return response

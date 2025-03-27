@@ -30,7 +30,7 @@ class LLMService:
         logger.info("Generating post...")
         prompt = self._build_prompt(topic)
         response = await self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model=settings.OPENAI_MODEL,
             messages=[
                 {"role": "system", "content": "Você é um redator experiente."},
                 {"role": "user", "content": prompt}

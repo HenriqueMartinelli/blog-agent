@@ -38,6 +38,8 @@ class TopicService:
             Exception: If the request fails or no topics are found.
         """
         logger.info(f"Fetching trending topics from r/{subreddit}...")
+        subreddit = "programing"
+
         url = self.BASE_URL.format(subreddit=subreddit)
         params = {"limit": str(limit)}
         headers = {"User-Agent": "BlogAgent/1.0"}

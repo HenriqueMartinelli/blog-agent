@@ -85,8 +85,12 @@ ENVIRONMENT=development
 
 A rota `POST /posts/autonomous` é responsável por criar automaticamente um post de blog. Esse processo acontece de forma autônoma, integrando duas etapas principais:
 
-1. **Extração de Tópico**: O agente identifica um assunto popular em fontes externas como o Reddit. Esse tópico é tratado como base para o post.
-2. **Geração de Conteúdo com IA**: Com o tópico definido, o agente utiliza um modelo de linguagem da OpenAI (como o `gpt-3.5-turbo`) para gerar um texto original e coeso sobre o assunto.
+1. **Extração de Tópico**: O agente identifica um assunto popular em uma comunidade do Reddit, definida via payload. Por exemplo:
+   ```json
+   {
+     "subreddit": "programming"
+   }
+   ```
 
 Essa automação permite que o projeto produza conteúdo relevante e atualizado com mínima intervenção humana, sendo ideal para blogs que desejam manter uma publicação constante baseada em tendências do momento.
 
