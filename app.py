@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from routers.routers import router
 from core.settings import settings
 from database.init_db import init_db
+from utils.log_utils import logger 
+from middlewares.log_middleware import LogMiddleware
 
 app = FastAPI(
 	title='Blog Agent',
@@ -16,6 +18,7 @@ app = FastAPI(
 		'url': 'https://spdx.org/licenses/AGPL-3.0-or-later.html',
 	},
 )
+app.middleware("http")(LogMiddleware())
 
 app.include_router(router)
 @app.on_event("startup")

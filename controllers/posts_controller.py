@@ -1,4 +1,3 @@
-# app/controllers/posts_controller.py
 from typing import Self
 from protocols.posts import IPostService
 from schemas.post import Post, PostCreate, PostUpdate

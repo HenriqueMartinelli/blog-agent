@@ -1,13 +1,16 @@
-# app/services/post_service.py
 
 from datetime import datetime
 from typing import List
 
 from protocols.posts import IPostService
+from models.models import PostModel
 from schemas.post import Post, PostCreate, PostUpdate
 from repositories.post_repository import PostRepository
 from services.topic_service import TopicService
 from services.LLMService import LLMService
+# from services.mock_llm_service import MockLLMService as LLMService
+from utils.log_utils import logger
+
 
 
 class PostService(IPostService):
@@ -23,6 +26,13 @@ class PostService(IPostService):
         return await self.repository.fetch_by_id(post_id)
 
     async def create_post(self, post_data: PostCreate) -> Post:
+        """
+        Creates a new post.
+        args:
+            post_data (PostCreate): Post data.
+        returns:
+            Post: Created post.
+        """
         new_post = Post(
             id=0,
             titulo=post_data.titulo,
@@ -40,19 +50,24 @@ class PostService(IPostService):
 
     # === AUTONOMOUS ===
 
-    async def create_post_autonomously(self) -> Post:
-        topics = await TopicService().get_trending_topics(limit=1)
+    async def create_post_autonomously(self, subreddit: str) -> Post:
+        """
+        Creates a post autonomously by fetching a trending topic and generating a post.
+        """
+        logger.info("Creating post autonomously...")
+        topics = await TopicService().get_trending_topics(subreddit=subreddit, limit=15)
         if not topics:
             raise Exception("Nenhum tópico encontrado.")
 
         selected_topic = topics[0]
-
+        
+        logger.info("Selected topic: %s", selected_topic)
         generated = await LLMService().generate_post(topic=selected_topic)
-
+        
         post_data = PostCreate(
             titulo=generated["title"],
             conteudo=generated["body"],
             autor="Autonomous Agent"
         )
-
+        logger.info("Creating post...")
         return await self.create_post(post_data)

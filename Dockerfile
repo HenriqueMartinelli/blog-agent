@@ -27,4 +27,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando de start com gunicorn
-CMD ["gunicorn", "-c", "gunicorn.conf.py", "app:app"]
+CMD ["gunicorn", "-c", "app:app"]
