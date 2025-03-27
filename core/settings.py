@@ -6,9 +6,6 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str
     OPENAI_MODEL: str
 
-    TOPIC_API_URL: str = "https://api.fake-topics.dev/trending"
-    TOPIC_API_KEY: str = "demo-key"
-
     DATABASE_URL: str = "postgresql+asyncpg://blog_user:senha123@localhost:5432/blog_db"
 
     DEV: bool = True
