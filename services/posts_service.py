@@ -1,4 +1,3 @@
-# app/services/post_service.py
 
 from datetime import datetime
 from typing import List
